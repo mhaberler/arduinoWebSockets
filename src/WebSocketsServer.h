@@ -43,7 +43,7 @@ class WebSocketsServerCore : protected WebSockets {
     typedef void (*WebSocketServerEvent)(uint8_t num, WStype_t type, uint8_t * payload, size_t length);
     typedef bool (*WebSocketServerHttpHeaderValFunc)(String headerName, String headerValue);
 #else
-    typedef std::function<void(uint8_t num, WStype_t type, uint8_t * payload, size_t length)> WebSocketServerEvent;
+    typedef std::function<void(WebSocketsServerCore *server, uint8_t num, WStype_t type, uint8_t * payload, size_t length)> WebSocketServerEvent;
     typedef std::function<bool(String headerName, String headerValue)> WebSocketServerHttpHeaderValFunc;
 #endif
 
@@ -178,7 +178,7 @@ class WebSocketsServerCore : protected WebSockets {
      */
     virtual void runCbEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
         if(_cbEvent) {
-            _cbEvent(num, type, payload, length);
+            _cbEvent(this, num, type, payload, length);
         }
     }
 
